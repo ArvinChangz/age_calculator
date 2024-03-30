@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PriceInput from "./PriceInput";
 import AgeGroupSelect from "./AgeGroupSelect";
@@ -68,8 +68,11 @@ const AgeArray = Array.from({ length: 21 }, (v, i) => { return { key: `${i}`, va
 
 const AgeGroupPriceList = ({ result, setResult, onChange }) => {
 
+    const [isOverlap, setIsOverlap] = useState(false);
+    const [isNotInclude, setIsNotInclude] = useState(false);
+
     const addResult = () => {
-        setResult([...result, { ageGroup: [0, 20], price: 0}]);
+        setResult([...result, { ageGroup: [0, 20], price: 0 }]);
     };
 
     const removeResult = (indexToRemove) => {
@@ -100,8 +103,8 @@ const AgeGroupPriceList = ({ result, setResult, onChange }) => {
                             overlap.push([sortIntervals[i + 1][0], sortIntervals[i][1]]);
                         };
                     } else {
-                        if (sortIntervals[i+1][0] - sortIntervals[i][1] > 1)
-                        notInclude.push([left + 1, sortIntervals[i + 1][0] - 1]);
+                        if (sortIntervals[i + 1][0] - sortIntervals[i][1] > 1)
+                            notInclude.push([left + 1, sortIntervals[i + 1][0] - 1]);
                     }
 
                     left = Math.max(left, sortIntervals[i + 1][1]); // 更新結束點
@@ -120,6 +123,11 @@ const AgeGroupPriceList = ({ result, setResult, onChange }) => {
         };
 
     };
+
+    useEffect(() => {
+        setIsOverlap(getNumberIntervals(result.map(item => item.ageGroup)).overlap.length > 0 ? true : false);
+        setIsNotInclude(getNumberIntervals(result.map(item => item.ageGroup)).notInclude.length > 0 ? true : false);
+    }, [result]);
 
     useEffect(() => {
         if (result.length > 0) {
@@ -150,7 +158,7 @@ const AgeGroupPriceList = ({ result, setResult, onChange }) => {
                                 result={result}
                                 ageArray={AgeArray}
                                 onChangeResult={setResult}
-                                getNumberIntervals={getNumberIntervals}
+                                isOverlap={isOverlap}
                             />
                             <PriceInput
                                 index={i}
@@ -163,14 +171,14 @@ const AgeGroupPriceList = ({ result, setResult, onChange }) => {
                 )
             })}
             <ChangeContainer
-                disabled={getNumberIntervals(result.map(item => item.ageGroup)).notInclude.length > 0 ? false : true}
+                disabled={!isNotInclude}
                 onClick={() => { addResult(); }}>
                 <svg fill="none" width="12px" height="12px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4 12H20M12 4V20" stroke={getNumberIntervals(result.map(item => item.ageGroup)).notInclude.length > 0 ? "rgba(25, 196, 189, 1)" : "rgba(138, 132, 132, 0.25)"} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M4 12H20M12 4V20" stroke={isNotInclude ? "rgba(25, 196, 189, 1)" : "rgba(138, 132, 132, 0.25)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <ChangeText
                     isError={false}
-                    isDisabled={getNumberIntervals(result.map(item => item.ageGroup)).notInclude.length <= 0}
+                    isDisabled={!isNotInclude}
                 >新增價格設定</ChangeText>
             </ChangeContainer>
         </Container>

@@ -35,9 +35,7 @@ border: ${props => props.isError ? "1px solid red" : `1px solid rgba(138, 132, 1
 padding-left: 4px;
 `;
 
-const InputBetweenContainer = styled.div.attrs(props => ({
-    isError: props.isError || false
-}))`
+const InputBetweenContainer = styled.div`
 display: flex;
 justify-content: center;
 align-items: center;
@@ -60,7 +58,7 @@ color: ${props => props.theme.color.Error};
 padding-left: 4px;
 `;
 
-const AgeGroupSelect = ({ index, result, onChangeResult, ageArray, getNumberIntervals }) => {
+const AgeGroupSelect = ({ index, result, onChangeResult, ageArray, isOverlap }) => {
 
     // 更新result
     const updateAgeGroup = (subIndex, newValue) => {
@@ -94,7 +92,7 @@ const AgeGroupSelect = ({ index, result, onChangeResult, ageArray, getNumberInte
             <InputContainer>
                 <InputSelectContainer
                     isLeft
-                    isError={getNumberIntervals(result.map(item => item.ageGroup)).overlap.length > 0 ? true : false}
+                    isError={isOverlap}
                     value={result[index].ageGroup[0]}
                     onChange={event => updateAgeGroup(0, event?.target?.value)}
                 >
@@ -111,7 +109,7 @@ const AgeGroupSelect = ({ index, result, onChangeResult, ageArray, getNumberInte
                 <InputBetweenContainer>~</InputBetweenContainer>
                 <InputSelectContainer
                     isLeft={false}
-                    isError={getNumberIntervals(result.map(item => item.ageGroup)).overlap.length > 0 ? true : false}
+                    isError={isOverlap}
                     value={result[index].ageGroup[1]}
                     onChange={event => updateAgeGroup(1, event?.target?.value)}
                 >
@@ -126,7 +124,7 @@ const AgeGroupSelect = ({ index, result, onChangeResult, ageArray, getNumberInte
                     })}
                 </InputSelectContainer>
             </InputContainer>
-            {getNumberIntervals(result.map(item => item.ageGroup)).overlap.length > 0
+            {isOverlap
                 ? (<ErrorHint>年齡區間不可重疊</ErrorHint>)
                 : null}
         </Container>
