@@ -7,10 +7,11 @@
 - Age display must be unique, and intervals cannot overlap.
 - Amounts must support decimal points and use thousand separators.
 - Provide error messages for related issues.
+<br />
 
- [Try it](https://age-calculator-demo.vercel.app/)
+ ### [Online Preview](https://age-calculator-demo.vercel.app/)
 
-
+<br />
 
 # Getting Started with Create React App
 
