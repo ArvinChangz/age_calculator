@@ -8,7 +8,9 @@
 - Amounts must support decimal points and use thousand separators.
 - Provide error messages for related issues.
 
-## [Try it](https://age-calculator-demo.vercel.app/)
+ [Try it](https://age-calculator-demo.vercel.app/)
+
+
 
 # Getting Started with Create React App
 
